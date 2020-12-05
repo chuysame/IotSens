@@ -1,0 +1,35 @@
+
+<section>
+  <div class="row g-0">
+		<div class="card">
+
+	<!-- Form--> <div class="col-lg-12 d-flex flex-column align-items-end">
+	              <div class="px-lg-5 pt-lg-4 pb-lg-3 p-4 w-100 mb-2">
+	                <img class="rounded-circle logo-personal img-fluid" src="/img/logo.png" alt="">
+	              </div>
+	                  <div class="px-lg-5 py-lg-4 p-4 w-100 align-self-center">
+	                        <h1 class="font-weight-bold mb-4 text-light">Admin Sign In</h1>
+
+	                        <form class="mb-5" id="formulario" action="/adm/in4321" method="POST">
+
+
+	                              <div class="input-group">
+	                                <input type="password" class="input--style-3 text-white mb-2" name="password" placeholder="Password" value="{{password}}">
+	                              </div>
+                                  <div class="">
+                                    {{>errors }}
+                                  </div>
+
+
+	                              <button type="submit" class="btn btn-primary mt-3 w-100">Signin</button>
+	                      </form >
+
+
+	                  </div>
+	                  <div class="text-center px-lg-5 pt-lg-3 pb-lg-4 p-4 w-100 mt-3">
+	                    <p class="d-inline-block mb-0 text-light">Please, leave this site if you are not an administrator </p>
+	                  </div>
+	          </div>
+		</div>
+  </div>
+</section>

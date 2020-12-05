@@ -1,0 +1,115 @@
+**********************CROME*********************
+
+mqttws31.js:858 Uncaught Error: AMQJS0011E Invalid state not connected.
+    at ClientImpl.Paho.MQTT.ClientImpl.subscribe (mqttws31.js:858)
+    at Client.subscribe (mqttws31.js:1849)
+    at publicar (actuatorMQTT.js:212)
+    at actuator.onClick (actuatorMQTT.js:250)
+    at HTMLDivElement.dispatch (freeboard.thirdparty.min.js:2)
+    at HTMLDivElement.y.handle (freeboard.thirdparty.min.js:2)
+Paho.MQTT.ClientImpl.subscribe @ mqttws31.js:858
+Client.subscribe @ mqttws31.js:1849
+publicar @ actuatorMQTT.js:212
+onClick @ actuatorMQTT.js:250
+dispatch @ freeboard.thirdparty.min.js:2
+y.handle @ freeboard.thirdparty.min.js:2
+
+
+ actuatorMQTT.js:197:13
+Uncaught Error: AMQJS0011E Invalid state not connected.
+    subscribe https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js:858
+    subscribe https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js:1849
+    publicar http://localhost:3003/admin/plugins/thirdparty/actuatorMQTT.js:212
+    onClick http://localhost:3003/admin/plugins/thirdparty/actuatorMQTT.js:250
+    dispatch http://localhost:3003/admin/js/freeboard.thirdparty.min.js:2
+    handle http://localhost:3003/admin/js/freeboard.thirdparty.min.js:2
+    add http://localhost:3003/admin/js/freeboard.thirdparty.min.js:2
+    on http://localhost:3003/admin/js/freeboard.thirdparty.min.js:2
+    each http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    each http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    on http://localhost:3003/admin/js/freeboard.thirdparty.min.js:2
+    t http://localhost:3003/admin/js/freeboard.thirdparty.min.js:3
+    render http://localhost:3003/admin/plugins/thirdparty/actuatorMQTT.js:265
+    render http://localhost:3003/admin/js/freeboard_plugins.min.js:1
+    update http://localhost:3003/admin/js/freeboard_plugins.min.js:2
+    m http://localhost:3003/admin/js/freeboard.thirdparty.min.js:13
+    h http://localhost:3003/admin/js/freeboard.thirdparty.min.js:13
+    g http://localhost:3003/admin/js/freeboard.thirdparty.min.js:13
+    notifySubscribers http://localhost:3003/admin/js/freeboard.thirdparty.min.js:13
+    N http://localhost:3003/admin/js/freeboard.thirdparty.min.js:13
+    c http://localhost:3003/admin/js/freeboard.thirdparty.min.js:13
+    e http://localhost:3003/admin/js/freeboard_plugins.min.js:1
+    newInstance http://localhost:3003/admin/plugins/thirdparty/actuatorMQTT.js:129
+    e http://localhost:3003/admin/js/freeboard_plugins.min.js:1
+    f http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    lt http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    f http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    b http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    u http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    b http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    o http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    rt http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    b http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    lt http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    u http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    lt http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    lt http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    DatasourceModel http://localhost:3003/admin/js/freeboard_plugins.min.js:1
+    notifySubscribers http://localhost:3003/admin/js/freeboard.thirdparty.min.js:13
+    N http://localhost:3003/admin/js/freeboard.thirdparty.min.js:13
+    c http://localhost:3003/admin/js/freeboard.thirdparty.min.js:13
+    deserialize http://localhost:3003/admin/js/freeboard_plugins.min.js:1
+    g http://localhost:3003/admin/js/freeboard_plugins.min.js:1
+    forEach http://localhost:3003/admin/js/freeboard.thirdparty.min.js:14
+    g http://localhost:3003/admin/js/freeboard_plugins.min.js:1
+    deserialize http://localhost:3003/admin/js/freeboard_plugins.min.js:1
+    loadDashboard http://localhost:3003/admin/js/freeboard_plugins.min.js:1
+    loadDashboard http://localhost:3003/admin/js/freeboard_plugins.min.js:2
+    <anonymous> http://localhost:3003/admin/index.html#source=dashboardSaved.json:63
+    l http://localhost:3003/admin/js/freeboard.thirdparty.min.js:2
+    fireWith http://localhost:3003/admin/js/freeboard.thirdparty.min.js:2
+    k http://localhost:3003/admin/js/freeboard.thirdparty.min.js:3
+    t http://localhost:3003/admin/js/freeboard.thirdparty.min.js:3
+    send http://localhost:3003/admin/js/freeboard.thirdparty.min.js:3
+    ajax http://localhost:3003/admin/js/freeboard.thirdparty.min.js:3
+    t http://localhost:3003/admin/js/freeboard.thirdparty.min.js:3
+    getJSON http://localhost:3003/admin/js/freeboard.thirdparty.min.js:3
+    <anonymous> http://localhost:3003/admin/index.html#source=dashboardSaved.json:62
+    promise callback* http://localhost:3003/admin/index.html#source=dashboardSaved.json:50
+    l http://localhost:3003/admin/js/freeboard.thirdparty.min.js:2
+    add http://localhost:3003/admin/js/freeboard.thirdparty.min.js:2
+    ready http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    init http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    x http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    <anonymous> http://localhost:3003/admin/index.html#source=dashboardSaved.json:26
+    f http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    lt http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    b http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    o http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    rt http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    b http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    lt http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    u http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    lt http://localhost:3003/admin/js/freeboard.thirdparty.min.js:1
+    <anonymous> http://localhost:3003/admin/index.html#source=dashboardSaved.json:20
+mqttws31.js:858:10
+
+
+
+
+
+
+Creating Paho client at timestamp=1605480328921
+				  1605481583928
+Creating Paho client at timestamp=1605482202204
+Creating Paho client at timestamp=1605482185972
+
+clientID para publicar:  quickstart65322
+clientID para publicar:  quickstart65322
+clientID para publicar:  quickstart65322clientID26
+clientID para publicar:  quickstart65322clientID43
+
+
+Button state:  true
+actuatorMQTT.js:200 ERROR: Connection lost
+actuatorMQTT.js:202 ERROR message:AMQJS0008I Socket closed.

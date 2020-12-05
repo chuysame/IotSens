@@ -1,0 +1,35 @@
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const Admin = require('../models/Admin');
+
+passport.use('local-signup-admin',new LocalStrategy({
+  usernameField: 'admin_email'
+}, async (admin_email, admin_password, done) => {
+  // Match Email's User
+  const admin_user = await Admin.findOne({admin_email: admin_email});//Busca el usuario en la base de datos
+  if (!admin_user) {
+    return done(null, false, { message: 'Not admin_User found.' });
+  } else {
+    // Match Password's User
+    const match = await admin_user.matchPassword(admin_password);
+    if(match) {
+			console.log('passwords iguales desde admin passport ');
+      return done(null, admin_user);
+    } else {
+      return done(null, false, { message: 'Incorrect admin_Password.' });
+    }
+  }
+}));
+
+//Pasport nesecita ser capaz de serializar y deserializar usuarios  para soportar inicios se de sesion persistentes
+
+passport.serializeUser((admin_user, done)=>{
+  console.log('passport.serializeUser... admin_user.id:',admin_user.id);
+	done(null, admin_user.id);//almacena el id del susario logeado
+});
+
+passport.deserializeUser((id, done)=> {//toma el id retorna un usuario
+	Admin.findById(id,(err, admin_user)=>{
+			done(err, admin_user);
+	});
+});

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>freeboard</title>
+	<meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content = "width = device-width, initial-scale = 1, user-scalable = no" />
+
+    <!--bootstrap 4 -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+		<!-- FONT AWESOME -->
+	  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	 <!--Custom CSS -->
+	 <link href="css/freeboard.css" rel="stylesheet" />
+    <!--<link href="css/freeboard.min.css" rel="stylesheet" /> -->
+    <script src="js/freeboard.thirdparty.min.js"></script>
+    <script type="text/javascript">
+        head.js("js/freeboard_plugins.min.js",
+                "plugins/thirdparty/clearobject.mqtt.plugin.js",
+                "plugins/thirdparty/actuator.js",
+                "plugins/thirdparty/actuatorMQTT.js",
+                "plugins/thirdparty/actuatorMQTTNotSensData.js",
+                // *** Load more plugins here ***
+                function(){
+                    $(function()
+                    { //DOM Ready
+                        freeboard.initialize(true); //inicializa la interfaz de freeboard
+
+                        let myHeaders = new Headers();
+                        const options = {
+                          method: 'POST',
+                          headers: myHeaders,
+                          body: new URLSearchParams({
+                            'switchState':"switchState"// si se desean enviar parametros(datos) para validar alguna credencial al iniciar el dashboard
+                          }),
+                        }
+                        const host = '/dash/load';
+                        let myRequest = new Request(host, options);
+                        fetch(myRequest, {credentials: 'include'})
+                          .then((res) => {
+                            if(res.ok) {//Si hay repuesta
+                              console.log('Ok');
+                              return res.json(); // <- parseamos la respuesta y lo devolvemos a nuestra función
+                            }else{// Si no hay respuesta del servidor
+                              console.log('No response');
+                            }
+
+                          })
+                          .then((resParsed) => {
+                            console.log("Json: " + resParsed)
+                            if(resParsed  !== null){//Si hay datos del dashboard en el JSON
+                              var jsonObject = JSON.parse(resParsed);
+                              console.log(jsonObject); // <- mostramos los datos recibidos
+                              freeboard.loadDashboard(jsonObject, function() {
+                                  freeboard.setEditing(false);
+                              });
+                            }else{//Si la respuesta es NULL por parte del servidor ******Abre el archivo del dasboard de ejemplo
+                              console.log('Now you dont have a dasboard on cloud, but we have an example: ');
+                              var hashpattern = window.location.hash.match(/(&|#)source=([^&]+)/);//extrae la direccion del archivo de ejemplo
+                              if (hashpattern !== null) {//Si hay direccion carga el archivo
+                                  $.getJSON(hashpattern[2], function(data) {
+                                      freeboard.loadDashboard(data, function() {
+                                          freeboard.setEditing(false);
+                                      });
+                                  });
+                              }
+                            }
+                          })
+
+
+
+                    });
+                }
+              );
+
+
+    </script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+  		<a class="navbar-brand" href="/">Notes App</a>
+  	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  	    <span class="navbar-toggler-icon"></span>
+  	  </button>
+  	  <div class="collapse navbar-collapse" id="navbarNav">
+  	    <ul class="navbar-nav">
+  	      <li class="nav-item active">
+  	        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+  	      </li>
+  	      <li class="nav-item">
+  	        <a class="nav-link" href="/about">About</a>
+  	      </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/">Chuy<span class="sr-only">(current)</span></a>
+          </li>
+  				</ul>
+  	      <ul class="navbar-nav ml-auto">
+
+
+
+
+  					<li class="nav-item active">
+  	 				<a class="nav-link" href="/users/logout">Logout</a>
+  	 			</li>
+
+
+  	      </ul>
+  	  </div>
+
+    </div>
+  </nav>
+
+<div id="board-content">
+    <img id="dash-logo" data-bind="attr:{src: header_image}, visible:header_image()">
+    <div class="gridster responsive-column-width">
+        <ul data-bind="grid: true">
+        </ul>
+    </div>
+</div>
+<header id="main-header" data-bind="if:allow_edit">
+    <div id="admin-bar">
+        <div id="admin-menu">
+            <div id="board-tools">
+                <h1 id="board-logo" class="title bordered">freeboard</h1>
+                <div id="board-actions">
+                    <ul class="board-toolbar vertical">
+                        <li data-bind="click: loadDashboardFromLocalFile"><i id="full-screen-icon" class="icon-folder-open icon-white"></i><label id="full-screen">Load Freeboard</label></li>
+                        <li onclick="loadDashboardClickedCloud()" id = "loadOnCloud"><i id="full-screen-icon" class="fas fa-cloud-download-alt icon-white"></i><label id="full-screen">Load on cloud Freeboard</label></li>
+                        <li onclick="saveDashboardClickedCloud()" id = "saveOnCloud"><i id="full-screen-icon" class="fas fa-cloud-upload-alt icon-white"></i><label id="full-screen">save on cloud Freeboard</label></li>
+                        <li><i class="icon-download-alt icon-white"></i>
+
+                            <label data-bind="click: saveDashboardClicked">Save Freeboard</label>
+                            <label style="display: none;" data-bind="click: saveDashboard" data-pretty="true">[Pretty]</label>
+                            <label style="display: none;" data-bind="click: saveDashboard" data-pretty="false">[Minified]</label>
+                        </li>
+                        <li id="add-pane" data-bind="click: createPane"><i class="icon-plus icon-white"></i><label>Add Pane</label></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="datasources">
+                <h2 class="title">DATASOURCES</h2>
+
+                <div class="datasource-list-container">
+                    <table class="table table-condensed sub-table" id="datasources-list" data-bind="if: datasources().length">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Last Updated</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody data-bind="foreach: datasources">
+                        <tr>
+                            <td>
+                                <span class="text-button datasource-name" data-bind="text: name, pluginEditor: {operation: 'edit', type: 'datasource'}"></span>
+                            </td>
+                            <td data-bind="text: last_updated"></td>
+                            <td>
+                                <ul class="board-toolbar">
+                                    <li data-bind="click: updateNow"><i class="icon-refresh icon-white"></i></li>
+                                    <li data-bind="pluginEditor: {operation: 'delete', type: 'datasource'}">
+                                        <i class="icon-trash icon-white"></i></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <span class="text-button table-operation" data-bind="pluginEditor: {operation: 'add', type: 'datasource'}">ADD</span>
+            </div>
+        </div>
+    </div>
+	<div id="column-tools" class="responsive-column-width">
+		<ul class="board-toolbar left-columns">
+			<li class="column-tool add" data-bind="click: addGridColumnLeft"><span class="column-icon right"></span><i class="icon-arrow-left icon-white"></i></li>
+			<li class="column-tool sub" data-bind="click: subGridColumnLeft"><span class="column-icon left"></span><i class="icon-arrow-right icon-white"></i></li>
+		</ul>
+		<ul class="board-toolbar right-columns">
+			<li class="column-tool sub" data-bind="click: subGridColumnRight"><span class="column-icon right"></span><i class="icon-arrow-left icon-white"></i></li>
+			<li class="column-tool add" data-bind="click: addGridColumnRight"><span class="column-icon left"></span><i class="icon-arrow-right icon-white"></i></li>
+		</ul>
+	</div>
+    <div id="toggle-header" data-bind="click: toggleEditing">
+        <i id="toggle-header-icon" class="icon-wrench icon-white"></i></div>
+</header>
+
+<div style="display:hidden">
+    <ul data-bind="template: { name: 'pane-template', foreach: panes}">
+    </ul>
+</div>
+
+<input type="text" style="display: none" id="refreshed" value="no">
+  <script type="text/javascript">
+  /*funcion para refrescar el dashboard cuando se da logOut y se intenta regresar
+    con el boton atras del navegador*/
+/*
+      onload = function () {
+         var e = document.getElementById("refreshed");
+         if (e.value == "no")
+             e.value = "yes";
+         else {
+               e.value = "no";
+               location.reload();
+         }
+     }
+*/
+   </script>
+
+<script type="text/html" id="pane-template">
+    <li data-bind="pane: true">
+        <header>
+            <h1 data-bind="text: title"></h1>
+            <ul class="board-toolbar pane-tools">
+                <li data-bind="pluginEditor: {operation: 'add', type: 'widget'}">
+                    <i class="icon-plus icon-white"></i>
+                </li>
+                <li data-bind="pluginEditor: {operation: 'edit', type: 'pane'}">
+                    <i class="icon-wrench icon-white"></i>
+                </li>
+                <li data-bind="pluginEditor: {operation: 'delete', type: 'pane'}">
+                    <i class="icon-trash icon-white"></i>
+                </li>
+            </ul>
+        </header>
+        <section data-bind="foreach: widgets">
+            <div class="sub-section" data-bind="css: 'sub-section-height-' + height()">
+                <div class="widget" data-bind="widget: true, css:{fillsize:fillSize}"></div>
+                <div class="sub-section-tools">
+                    <ul class="board-toolbar">
+                        <!-- ko if:$parent.widgetCanMoveUp($data) -->
+                        <li data-bind="click:$parent.moveWidgetUp"><i class="icon-chevron-up icon-white"></i></li>
+                        <!-- /ko -->
+                        <!-- ko if:$parent.widgetCanMoveDown($data) -->
+                        <li data-bind="click:$parent.moveWidgetDown"><i class="icon-chevron-down icon-white"></i></li>
+                        <!-- /ko -->
+                        <li data-bind="pluginEditor: {operation: 'edit', type: 'widget'}"><i class="icon-wrench icon-white"></i></li>
+                        <li data-bind="pluginEditor: {operation: 'delete', type: 'widget'}"><i class="icon-trash icon-white"></i></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </li>
+</script>
+<script>
+function saveDashboardClickedCloud() {
+  //var x = document.getElementById("saveOnCloud");
+  //x.disabled = true;
+  //alert("Hello! I am an alert box!");
+freeboard.showLoadingIndicator(true);
+var Dashjson = JSON.stringify(freeboard.serialize());
+console.log('Desde IndexDasboard: '+ Dashjson);
+//post('/dash/save', {stringDash: Dashjson});
+
+let myHeaders = new Headers();
+
+fetch('/dash/save', {
+  method: 'POST',
+  headers: myHeaders,
+  body: new URLSearchParams({stringDash: Dashjson}),
+})
+.then((res) => {
+  if(res.ok) {
+    console.log('Ok');
+    freeboard.setEditing(false);
+    freeboard.showLoadingIndicator(false);
+  //  return res.json(); // <- parseamos el response y lo devolvemos a nuestra función
+  }else{
+    console.log('No data recived')
+  }
+})
+
+
+}
+/*
+function post(path, params, method='post') {
+
+     //* sends a request to the specified url from a form. this will change the window location.
+     //* @param {string} path the path to send the post request to
+     //* @param {object} params the paramiters to add to the url
+    // * @param {string} [method=post] the method to use on the form
+
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    const form = document.createElement('form');
+    form.method = method;
+    form.action = path;
+
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = key;
+        hiddenField.value = params[key];
+
+        form.appendChild(hiddenField);
+      }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    console.log('Enviado');
+}
+*/
+function loadDashboardClickedCloud() {
+//  var x = document.getElementById("loadOnCloud");
+  //x.disabled = true;
+  //alert("Hello! I am an alert box!");
+//var Dashjson = JSON.stringify(freeboard.serialize());
+//console.log('Desde IndexDasboard: '+ Dashjson);
+//post('/dash/save', {stringDash: Dashjson});
+
+
+freeboard.showLoadingIndicator(true);
+let myHeaders = new Headers();
+
+const options = {
+  method: 'POST',
+  headers: myHeaders,
+  body: new URLSearchParams({
+    'switchState':"switchState"
+  }),
+}
+const host = '/dash/load';
+let myRequest = new Request(host, options);
+fetch(myRequest, {credentials: 'include'})
+  .then((res) => {
+    if(res.ok) {
+      console.log('Ok');
+      return res.json(); // <- parseamos el response y lo devolvemos a nuestra función
+    }
+
+  })
+  .then((resParsed) => {
+    if(resParsed  !== null){//Si hay datos del dashboard en el JSON recibido mediante POST
+      var jsonObject = JSON.parse(resParsed);
+      console.log(jsonObject); // <- mostramos los datos recibidos
+      freeboard.loadDashboard(jsonObject, function() {
+          freeboard.setEditing(false);
+          freeboard.showLoadingIndicator(false);
+      });
+  }else{
+      //alert("Now you dont have a saved Dasboard on cloud!");    //
+      freeboard.showLoadingIndicator(false);
+      freeboard.showDialog($("<div align='center'>Now you dont have a saved Dasboard on cloud!</div>"),"No prblem!","OK",null,function(){});
+  }
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+}
+
+</script>
+
+</body>
+</html>

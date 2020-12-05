@@ -1,0 +1,42 @@
+
+<section>
+  <div class="row g-0">
+		<div class="card">
+	<!-- Form--> <div class="col-lg-12 d-flex flex-column align-items-end">
+	              <div class="px-lg-5 pt-lg-4 pb-lg-3 p-4 w-100 mb-2">
+	                <img class="rounded-circle logo-personal img-fluid" src="/img/logo.png" alt="">
+	              </div>
+	                  <div class="px-lg-5 py-lg-4 p-4 w-100 align-self-center">
+	                        <h1 class="font-weight-bold mb-4 text-light">Acount Register</h1>
+
+	                        <form class="mb-5" id="formulario" action="/users/signupval" method="POST">
+	                              <div class="input-group">
+	                                <input type="text" class="input--style-3 text-white" name="name" placeholder="Name" value="{{name}}" >
+	                              </div>
+																<div class="input-group">
+	                                <input type="email" class="input--style-3 text-white mb-2" name="email" placeholder="Email" value="{{email}}" >
+	                              </div>
+	                              <div class="input-group">
+	                                <input type="password" class="input--style-3 text-white mb-2" name="password" placeholder="Password" value="{{password}}">
+	                              </div>
+																<div class="input-group">
+	                                <input type="password" class="input--style-3 text-white mb-2" name="confirm_password" placeholder="Confirm Password" value="{{confirm_password}}">
+	                              </div>
+
+
+	                              <button type="submit" class="btn btn-primary mt-3 w-100">SignUp</button>
+	                      </form >
+	                              <p class="font-weight-bold text-center text-muted mt-5">Or continue with</p>
+	                              <div class="d-flex justify-content-around mt-6">
+
+	                                <button type="submit" class="btn btn-outline-light flex-grow-1 lead mr-2 btngoogle">Google</button>
+	                                <button type="submit" class="btn btn-outline-light flex-grow-1 lead mr-2 btnfacebook">Facebook</button>
+	                              </div>
+	                  </div>
+	                  <div class="text-center px-lg-5 pt-lg-3 pb-lg-4 p-4 w-100 mt-5">
+	                    <p class="d-inline-block mb-0 text-light">Already registered? </p> <a class="text-light font-weight-bold text-decoration-none" href="/users/signin">Sign in!</a>
+	                  </div>
+	          </div>
+		</div>
+  </div>
+</section>
