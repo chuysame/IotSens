@@ -26,5 +26,23 @@ Ingresar a la aplicacion en un navegador con la siguinte direccion:
 OTROS ENLACES DE INTERES:
 adminMongo: plataforma web MIT javascript para manejar  mongoDB
 https://github.com/mrvautin/adminMongo
-	
-	
+
+DEPLOY RASPBERRY PI 3B:
+  para evitar el CG-Nat se recomienda usar dataplicity o remotei3:
+    https://www.dataplicity.com/devices/42b594a9-8dea-4d95-873b-e9287d7c9b70/
+    https://app.remote.it/#devices
+
+
+REMOTEI3:
+remotei3 permite varios tipos de conexion ssh, http, https, samba etc...
+
+para hacer coneccion ssh local se utiliza la siguiente notacion:
+  ssh <usuario>@<servidor> al estilo: ssh ubuntu@192.168.0.12
+  ejemplo:  ssh ubuntu@proxy17.rt3.io -p 38909 
+
+para hacer coneccion remota tipo sshfs:
+  sshfs -p 38909 ubuntu@proxy17.rt3.io:/home/ubuntu/iotSens sshfs-dir 
+  donde: -p significa  el puerto de remotei3 y proxy17.rt3.io el servidor(ambos parametros pueden cambiar), seguido de la ruta origen a modificar y la 
+  carpeta local donde se almacena el bufer montado
+
+
