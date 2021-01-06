@@ -15,6 +15,11 @@ router.get('/admin/in123',(req,res,) => {//// Ruta abrir sesion
 	res.render('admin/in123',{layout: 'admin_main_signin'});
 });
 
+router.post('/adm/in4321',speedLimiter,password_check,/* isAdm,*/(req,res)=>{ // recibe y revisa el pass le agrega un limite en la tasa de peticiones
+//	res.redirect('/admin/in123home');
+});
+
+
 router.get('/admin/in123home',async(req,res) => {//// Ruta home admin
 	let var_ent = []
 	var_ent[0] = await {"PORT_SERVERLOCAL":read_env('/home/zagan/Escritorio/notes-app/.env',"PORT_SERVERLOCAL")};
@@ -25,10 +30,6 @@ router.get('/admin/in123home',async(req,res) => {//// Ruta home admin
 	res.render('admin/home_admin',{layout: 'admin_main',var_ent});
 });
 
-
-router.post('/adm/in4321',speedLimiter,password_check,/* isAdm,*/(req,res)=>{ // recibe y revisa el pass le agrega un limite en la tasa de peticiones
-	res.redirect('/admin/in123home');
-});
 
 /*
 *______________________________REGISTRO DE ADMIN_USERS________________________________________________

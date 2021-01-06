@@ -10,11 +10,11 @@
 	                  <div class="px-lg-5 py-lg-4 p-4 w-100 align-self-center">
 	                        <h1 class="font-weight-bold mb-4 text-light">Admin Sign In</h1>
 
-	                        <form class="mb-5" id="formulario" action="/adm/in4321" method="POST">
+	                        <form class="mb-5" id="login" >
 
 
 	                              <div class="input-group">
-	                                <input type="password" class="input--style-3 text-white mb-2" name="password" placeholder="Password" value="{{password}}">
+	                                <input type="password"  class="input--style-3 text-white mb-2" id="password" placeholder="Password" value="{{password}}">
 	                              </div>
                                   <div class="">
                                     {{>errors }}
@@ -33,3 +33,33 @@
 		</div>
   </div>
 </section>
+<script>
+  const form = document.getElementById('login')
+  form.addEventListener('submit', login)
+
+  async function login(event) {
+    event.preventDefault()
+    const password = document.getElementById('password').value
+    console.log("entro a enviat fetch");
+    const result = await fetch('/adm/in4321', {
+	method: 'POST',
+	headers: {
+        	'Content-Type': 'application/json'
+	},
+	body: JSON.stringify({
+      	  password
+	})
+    }).then((res) => res.json())
+
+    if (result.status === 'ok') {
+      // everythign went fine
+      console.log('Got the token: ', result.data)
+      localStorage.setItem('token', result.data)
+//      alert('Success')
+      window.location.assign('/admin/in123home');
+    } else {
+      alert(result.error)
+				}
+  }
+
+</script>

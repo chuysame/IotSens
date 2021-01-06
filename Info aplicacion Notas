@@ -27,8 +27,33 @@ OTROS ENLACES DE INTERES:
 adminMongo: plataforma web MIT javascript para manejar  mongoDB
 https://github.com/mrvautin/adminMongo
 
-DEPLOY RASPBERRY PI 3B:
-  para evitar el CG-Nat se recomienda usar dataplicity o remotei3:
+DEPLOY EN RASPBERRY PI 3B:
+Instala ubuntu server 18.04 arm64:
+  https://ubuntu.com/download/raspberry-pi
+Crear el archivo ssh sin extension en la raiz del sistema
+Obtener el ip privado de la raspberry en el router agregando la ip del router 192.168.0.1 en un navegador
+Encender y conectar la raspberry a internet mediante cable o wifi 
+Abrir una consola en la laptop escribir ssh user@host y tipear la contraseña ej: ssh ubuntu@192.168.0.12
+una vez conectado a la raspberry mediante ssh instalar node, npm y mongoDB y ejecutar 
+  https://linuxize.com/post/how-to-install-node-js-on-raspberry-pi/
+  https://developer.mongodb.com/how-to/mongodb-on-raspberry-pi
+  systemctl enable mongodb.service 
+para que el servicio de mongodb se inicie al iniciar el sistema
+Crear una carpeta y clonar el repositorio chuysame/iotSens:
+  git clone https://github.com/chuysame/iotSens
+Instalar las dependencias para instalar los modulos con:
+  npm install
+Instalar de forma global:
+  npm i express express-handlebars express-session method-override mongoose passport passport-local bcryptjs connect-flash
+Probar la aplicacion con:
+  npm run dev
+Abrir los puertos 80, 443 y redireccionarlos a la ip privada de la raspberry 
+Instalar nginx y configurarlo como reverse proxy para redirigir el trafico del puerto 80 y 443 al de la aplicacion node
+  https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+uso de sshfs:
+https://www.linode.com/docs/guides/using-sshfs-on-linux/
+
+para evitar el CG-Nat se recomienda usar dataplicity o remotei3:
     https://www.dataplicity.com/devices/42b594a9-8dea-4d95-873b-e9287d7c9b70/
     https://app.remote.it/#devices
 
@@ -45,4 +70,6 @@ para hacer coneccion remota tipo sshfs:
   donde: -p significa  el puerto de remotei3 y proxy17.rt3.io el servidor(ambos parametros pueden cambiar), seguido de la ruta origen a modificar y la 
   carpeta local donde se almacena el bufer montado
 
-
+DATAPLICITY:
+  Asigna un dominio a tu aplicacion y permite ssh desde el navegador
+https://docs.dataplicity.com/docs
