@@ -16,7 +16,7 @@ router.get('/admin/in123',(req,res,) => {//// Ruta abrir sesion
 });
 
 router.post('/adm/in4321',speedLimiter,password_check,/* isAdm,*/(req,res)=>{ // recibe y revisa el pass le agrega un limite en la tasa de peticiones
-//	res.redirect('/admin/in123home');
+	res.redirect('/admin/in123home');
 });
 
 
