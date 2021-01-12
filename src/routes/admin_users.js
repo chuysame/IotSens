@@ -5,7 +5,7 @@ const path = require('path');
 const { check, validationResult } = require('express-validator');
 const Admin = require('../models/Admin');
 const passport = require('passport');
-const { isAdm, limiter, speedLimiter,password_check }= require('../helpers/auth');
+const { isAdm, limiter, speedLimiter,password_check,token_check }= require('../helpers/auth');
 const { read_env }= require('../helpers/env_var');
 
 /*
@@ -15,19 +15,21 @@ router.get('/admin/in123',(req,res,) => {//// Ruta abrir sesion
 	res.render('admin/in123',{layout: 'admin_main_signin'});
 });
 
-router.post('/adm/in4321',speedLimiter,password_check,/* isAdm,*/(req,res)=>{ // recibe y revisa el pass le agrega un limite en la tasa de peticiones
-	res.redirect('/admin/in123home');
+router.post('/adm/in4321',speedLimiter,password_check,/* isAdm,*/(req,res)=>{ // recibe y revisa el pass le agrega un limite en la tasa de peticiones, genera y envia el JWT
+//	res.redirect('/admin/in123home');
 });
 
 
 router.get('/admin/in123home',async(req,res) => {//// Ruta home admin
-	let var_ent = []
+        console.log("llego la peticion");
+        let var_ent = []
 	var_ent[0] = await {"PORT_SERVERLOCAL":read_env('/home/zagan/Escritorio/notes-app/.env',"PORT_SERVERLOCAL")};
 	var_ent[1] = await {"MONGODB_URI":read_env('/home/zagan/Escritorio/notes-app/.env',"MONGODB_URI")};
 	var_ent[2] = await {"PORT_BROKMQTT":read_env('/home/zagan/Escritorio/notes-app/.env',"PORT_BROKMQTT")};
 	var_ent[3] = await {"SISTEMWEBPASS":read_env('/home/zagan/Escritorio/notes-app/.env',"SISTEMWEBPASS")};
-
-	res.render('admin/home_admin',{layout: 'admin_main',var_ent});
+ 
+        res.json({ status: 'ok', data: "listo" })
+//	res.render('admin/home_admin',{layout: 'admin_main',var_ent});
 });
 
 

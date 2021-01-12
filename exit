@@ -1,0 +1,100 @@
+[1mdiff --git a/src/helpers/auth.js b/src/helpers/auth.js[m
+[1mindex f04f0b2..f9ee804 100644[m
+[1m--- a/src/helpers/auth.js[m
+[1m+++ b/src/helpers/auth.js[m
+[36m@@ -69,12 +69,14 @@[m [mhelpers.password_check = function(req, res, next){[m
+ 		},[m
+ 		JWT_SECRET[m
+ 		)[m
+[31m-                res.json({ status: 'ok', data: token })[m
+[31m-	      // return next();[m
+[31m-                res.end();[m
+[32m+[m[32m              // res.json({ status: 'ok', data: token })[m
+[32m+[m	[32m       return next();[m
+[32m+[m[32m               // res.end();[m
+ 	}else {[m
+[31m-		errors.push({text:'Incorrect password'});[m
+[31m-		res.render('admin/in123',{layout: 'admin_main_signin',errors});[m
+[32m+[m[32m//		errors.push({text:'Incorrect password'});[m
+[32m+[m[32m//		res.render('admin/in123',{layout: 'admin_main_signin',errors});[m
+[32m+[m[32m                res.json({status:null, data:"Incorrect password"});[m
+[32m+[m[32m                res.end();[m
+ 	}[m
+ [m
+ }[m
+[1mdiff --git a/src/views/admin/in123.html b/src/views/admin/in123.html[m
+[1mindex 6190def..7b44d3a 100644[m
+[1m--- a/src/views/admin/in123.html[m
+[1m+++ b/src/views/admin/in123.html[m
+[36m@@ -16,7 +16,7 @@[m
+ 	                              <div class="input-group">[m
+ 	                                <input type="password"  class="input--style-3 text-white mb-2" id="password" placeholder="Password" value="{{password}}">[m
+ 	                              </div>[m
+[31m-                                  <div class="">[m
+[32m+[m[32m                                  <div class="text-danger" id="errors">[m
+                                     {{>errors }}[m
+                                   </div>[m
+ [m
+[36m@@ -36,11 +36,32 @@[m
+ <script>[m
+   const form = document.getElementById('login')[m
+   form.addEventListener('submit', login)[m
+[32m+[m[41m  [m
+[32m+[m[32m  function login(event){[m
+[32m+[m[32m    event.preventDefault()[m
+[32m+[m[32m    const password = document.getElementById('password').value[m
+[32m+[m[32m    var xhr = new XMLHttpRequest();[m
+[32m+[m[32m    xhr.open("POST", 'http://localhost:3003/adm/in4321', true);[m
+[32m+[m[32m     console.log("enviado");[m
+[32m+[m[32m    //Send the proper header information along with the request[m
+ [m
+[32m+[m[32m    xhr.setRequestHeader('Content-Type', 'application/json');[m
+[32m+[m[32m/*    xhr.onreadystatechange = function() { // Call a function when the state changes.[m
+[32m+[m[32m      if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {[m
+[32m+[m[32m        // Request finished. Do processing here.[m
+[32m+[m[32m        console.log("respondio correctamente");[m
+[32m+[m[32m      }[m
+[32m+[m[32m    }[m
+[32m+[m[32m*/[m
+[32m+[m[32m    xhr.send(JSON.stringify({ "password": password}));[m
+[32m+[m[32m  }[m
+[32m+[m[32m  /*[m
+   async function login(event) {[m
+     event.preventDefault()[m
+     const password = document.getElementById('password').value[m
+     console.log("entro a enviat fetch");[m
+[32m+[m
+[32m+[m
+     const result = await fetch('/adm/in4321', {[m
+ 	method: 'POST',[m
+ 	headers: {[m
+[36m@@ -49,8 +70,13 @@[m
+ 	body: JSON.stringify({[m
+       	  password[m
+ 	})[m
+[31m-    }).then((res) => res.json())[m
+[32m+[m[32m    })[m
+[32m+[m[32m    //.then((res) => res.json())[m
+ [m
+[32m+[m[32m    const json = await result.json();[m
+[32m+[m[32m    console.log("json: ", json);[m
+[32m+[m[32m*/[m
+[32m+[m[32m/*[m
+     if (result.status === 'ok') {[m
+       // everythign went fine[m
+       console.log('Got the token: ', result.data)[m
+[36m@@ -58,8 +84,11 @@[m
+ //      alert('Success')[m
+       window.location.assign('/admin/in123home');[m
+     } else {[m
+[31m-      alert(result.error)[m
+[31m-				}[m
+[31m-  }[m
+[32m+[m[32m//      alert(result.error)[m
+[32m+[m[32m        document.getElementById("errors").innerHTML = result.data;[m
+[32m+[m[32m        console.log(result.data);[m
+[32m+[m[32m    }[m
+ [m
+[32m+[m[32m }[m
+[32m+[m[32m*/[m
+ </script>[m

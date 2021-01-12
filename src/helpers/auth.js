@@ -69,13 +69,29 @@ helpers.password_check = function(req, res, next){
 		},
 		JWT_SECRET
 		)
-                res.json({ status: 'ok', data: token })
+               res.json({ status: 'ok', data: token })
 	      // return next();
+                console.log("request enviada");
                 res.end();
 	}else {
-		errors.push({text:'Incorrect password'});
-		res.render('admin/in123',{layout: 'admin_main_signin',errors});
+//		errors.push({text:'Incorrect password'});
+//		res.render('admin/in123',{layout: 'admin_main_signin',errors});
+                res.json({status:null, data:"Incorrect password"});
+                res.end();
 	}
+
+}
+helpers.token_check = function(req, res, next){
+  const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
+  console.log("entro a token_check");
+  try {
+    const user = jwt.verify(req.body.token, JWT_SECRET)
+//    res.json({ status: 'ok' })
+      return next();
+  }catch(error) {
+    console.log(error)
+    res.json({ status: 'error', error: ';))' })
+  }
 
 }
 

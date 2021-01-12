@@ -21,7 +21,8 @@
                                   </div>
 
 
-	                              <button type="submit" class="btn btn-primary mt-3 w-100">Signin</button>
+                                  <!--   <button  class="btn btn-primary mt-3 w-100">Signin</button> -->
+                                      <li onclick="signin()" class = "btn btn-primary" id = "loadOnCloud">Signin</li>
 	                      </form >
 
 
@@ -34,32 +35,22 @@
   </div>
 </section>
 <script>
-  const form = document.getElementById('login')
-  form.addEventListener('submit', login)
-
-  async function login(event) {
-    event.preventDefault()
-    const password = document.getElementById('password').value
-    console.log("entro a enviat fetch");
-    const result = await fetch('/adm/in4321', {
-	method: 'POST',
-	headers: {
-        	'Content-Type': 'application/json'
-	},
-	body: JSON.stringify({
-      	  password
-	})
-    }).then((res) => res.json())
-
-    if (result.status === 'ok') {
-      // everythign went fine
-      console.log('Got the token: ', result.data)
-      localStorage.setItem('token', result.data)
-//      alert('Success')
-      window.location.assign('/admin/in123home');
-    } else {
-      alert(result.error)
-				}
-  }
+function async signin() {
+const password = document.getElementById("password").value;
+let myHeaders = new Headers();
+const options = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json; charset=utf-8'
+  }, //headers: myHeaders,
+  body: JSON.stringify({
+    password
+  }),
+}
+const host = '/adm/in4321';
+let myRequest = new Request(host, options);
+await fetch(myRequest, {credentials: 'include'})
+  .then(res => res.json())
+  .then(json => console.log(json));}
 
 </script>
