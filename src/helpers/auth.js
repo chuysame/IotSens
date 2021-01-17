@@ -69,10 +69,18 @@ helpers.password_check = function(req, res, next){
 		},
 		JWT_SECRET
 		)
+<<<<<<< Updated upstream
                res.json({ status: 'ok', data: token })
 	      // return next();
                 console.log("request enviada");
                 res.end();
+=======
+               //res.json({ status: 'ok', data: token })
+	        //res.header('token', JSON.stringify({ token }));
+                return next();
+                //console.log("request enviada");
+                //res.end();
+>>>>>>> Stashed changes
 	}else {
 //		errors.push({text:'Incorrect password'});
 //		res.render('admin/in123',{layout: 'admin_main_signin',errors});
@@ -94,5 +102,9 @@ helpers.token_check = function(req, res, next){
   }
 
 }
+<<<<<<< Updated upstream
+=======
 
-module.exports = helpers;
+
+>>>>>>> Stashed changes
+
