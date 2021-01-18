@@ -6,7 +6,7 @@ console.log(process.env.NODE_ENV);
 
 const fs = require('fs')
 const dotenv = require('dotenv')
-
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
@@ -43,6 +43,7 @@ app.engine('html', exphbs({
 app.set('view engine', 'html');
 
 //middlewares
+app.use(cookieParser());
 app.use(express.urlencoded({extended: false}));//permite cundo un formulario mande datos pueda interpretarlos
 app.use(methodOverride('_method'));
 app.use(session({

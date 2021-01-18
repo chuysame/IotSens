@@ -57,6 +57,7 @@ helpers.limiter = rateLimit({//limita la tasa de peticiones por ususario
 	*/
 });
 
+
 helpers.password_check = function(req, res, next){
         const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
 	const errors = [];
@@ -69,18 +70,8 @@ helpers.password_check = function(req, res, next){
 		},
 		JWT_SECRET
 		)
-<<<<<<< Updated upstream
-               res.json({ status: 'ok', data: token })
-	      // return next();
-                console.log("request enviada");
-                res.end();
-=======
-               //res.json({ status: 'ok', data: token })
-	        //res.header('token', JSON.stringify({ token }));
-                return next();
-                //console.log("request enviada");
-                //res.end();
->>>>>>> Stashed changes
+                res.locals.authorization = token;
+	        return next();
 	}else {
 //		errors.push({text:'Incorrect password'});
 //		res.render('admin/in123',{layout: 'admin_main_signin',errors});
@@ -89,21 +80,8 @@ helpers.password_check = function(req, res, next){
 	}
 
 }
-helpers.token_check = function(req, res, next){
-  const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
-  console.log("entro a token_check");
-  try {
-    const user = jwt.verify(req.body.token, JWT_SECRET)
-//    res.json({ status: 'ok' })
-      return next();
-  }catch(error) {
-    console.log(error)
-    res.json({ status: 'error', error: ';))' })
-  }
 
-}
-<<<<<<< Updated upstream
-=======
+module.exports = helpers;
 
 
 >>>>>>> Stashed changes
