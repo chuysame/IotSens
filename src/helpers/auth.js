@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
 const User = require('../models/Users');
@@ -56,17 +57,31 @@ helpers.limiter = rateLimit({//limita la tasa de peticiones por ususario
 	*/
 });
 
+
 helpers.password_check = function(req, res, next){
+        const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
 	const errors = [];
+        console.log("req.body: ", req.body)
 	if(process.env.SISTEMWEBPASS === req.body.password){
 		console.log('los password son iguales:');
-		return next();
+                const token = jwt.sign({
+		  id: process.env.PASS_ID,
+		  username: process.env.USERNAME
+		},
+		JWT_SECRET
+		)
+               //res.json({ status: 'ok', data: token })
+                //res.header('Authorization', JSON.stringify({ token }));
+                res.locals.authorization = token;
+	        return next();
+                //console.log("request enviada");
+                //res.end();
 	}else {
-		errors.push({text:'Incorrect password'});
-		//res.render('admin/in123',{errors});
-		res.render('admin/in123',{layout: 'admin_main_signin',errors});
+//		errors.push({text:'Incorrect password'});
+//		res.render('admin/in123',{layout: 'admin_main_signin',errors});
+                res.json({status:null, data:"Incorrect password"});
+                res.end();
 	}
 
 }
-
 module.exports = helpers;
