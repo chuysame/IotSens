@@ -22,20 +22,19 @@ router.post('/adm/in4321',speedLimiter,password_check,/* isAdm,*/(req,res)=>{ //
 	res.redirect('/admin/in123home');
 });
 router.get('/admin/in123home',async(req,res) => {//// Ruta home admin
+        console.log("Get cookies: ", req.cookies.Authorization);//lifetime
 	let var_ent = []
 	var_ent[0] = await {"PORT_SERVERLOCAL":read_env('/home/zagan/Escritorio/notes-app/.env',"PORT_SERVERLOCAL")};
 	var_ent[1] = await {"MONGODB_URI":read_env('/home/zagan/Escritorio/notes-app/.env',"MONGODB_URI")};
 	var_ent[2] = await {"PORT_BROKMQTT":read_env('/home/zagan/Escritorio/notes-app/.env',"PORT_BROKMQTT")};
 	var_ent[3] = await {"SISTEMWEBPASS":read_env('/home/zagan/Escritorio/notes-app/.env',"SISTEMWEBPASS")};
  
-        res.json({ status: 'ok', data: "listo" })
-//	res.render('admin/home_admin',{layout: 'admin_main',var_ent});
+//       res.json({ status: 'ok', data: "listo" })
+	res.render('admin/home_admin',{layout: 'admin_main',var_ent});
 });
 
 
-router.post('/adm/in4321',speedLimiter,password_check,/* isAdm,*/(req,res)=>{ // recibe y revisa el pass le agrega un limite en la tasa de peticiones
-	res.redirect('/admin/in123home');
-});
+
 
 /*
 *______________________________REGISTRO DE ADMIN_USERS________________________________________________

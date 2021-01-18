@@ -1,4 +1,3 @@
-
 <section>
   <div class="row g-0">
 		<div class="card">
@@ -10,19 +9,18 @@
 	                  <div class="px-lg-5 py-lg-4 p-4 w-100 align-self-center">
 	                        <h1 class="font-weight-bold mb-4 text-light">Admin Sign In</h1>
 
-	                        <form class="mb-5" id="login" >
+	                        <form class="mb-5" id="formulario" action="/adm/in4321" method="POST">
 
 
 	                              <div class="input-group">
-	                                <input type="password"  class="input--style-3 text-white mb-2" id="password" placeholder="Password" value="{{password}}">
+	                                <input type="password" class="input--style-3 text-white mb-2" name="password" placeholder="Password" value="{{password}}">
 	                              </div>
                                   <div class="">
                                     {{>errors }}
                                   </div>
 
 
-                                  <!--   <button  class="btn btn-primary mt-3 w-100">Signin</button> -->
-                                      <li onclick="signin()" class = "btn btn-primary" id = "loadOnCloud">Signin</li>
+	                              <button type="submit" class="btn btn-primary mt-3 w-100">Signin</button>
 	                      </form >
 
 
@@ -34,23 +32,3 @@
 		</div>
   </div>
 </section>
-<script>
-function async signin() {
-const password = document.getElementById("password").value;
-let myHeaders = new Headers();
-const options = {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json; charset=utf-8'
-  }, //headers: myHeaders,
-  body: JSON.stringify({
-    password
-  }),
-}
-const host = '/adm/in4321';
-let myRequest = new Request(host, options);
-await fetch(myRequest, {credentials: 'include'})
-  .then(res => res.json())
-  .then(json => console.log(json));}
-
-</script>

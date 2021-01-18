@@ -84,5 +84,3 @@ helpers.password_check = function(req, res, next){
 module.exports = helpers;
 
 
->>>>>>> Stashed changes
-
