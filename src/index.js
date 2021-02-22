@@ -16,7 +16,14 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const { isAuthenticated }= require('./helpers/auth');
 const { read_env }= require('./helpers/env_var');
+const https = require('https');
 
+var options = {
+    key: fs.readFileSync('./ssl/privatekey.pem'),
+    cert: fs.readFileSync('./ssl/certificate.pem'),
+};
+console.log("private key= ",options.key);
+var port = 3003;
 
 //initializations
 const app = express();
@@ -136,7 +143,11 @@ app.all('/public/*', function(req, res, next) {
 //app.use(express.static(path.join(__dirname, 'public')));
 //app.use('/static' express.static(path.join(__dirname,'public')));
 //Server is listenig
-
+/*
 app.listen(app.get('port'), () => {
 	console.log('server on port', app.get('port'));
+});
+*/
+var server = https.createServer(options, app).listen(port, function(){
+  console.log("Express server listening on port " + port);
 });
