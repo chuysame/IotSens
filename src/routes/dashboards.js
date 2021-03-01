@@ -132,7 +132,7 @@ router.post('/dash/actuatorMQTT', isAuthenticated, (req,res)=> {// Suscribe y pu
 });
 
 });//FIN de subcribe y publica MQTT
-
+/*
 router.post('/freeboardJSON', (req, res) => {//responde con valores aleatorios generados al recibir la peticion
   //console.log("El servidor Get respondió con un JSON");
   var geo = Math.round(Math.random()*10);
@@ -144,7 +144,7 @@ router.post('/freeboardJSON', (req, res) => {//responde con valores aleatorios g
 
 });
 
-
+*/
 router.get('/esp32', (req, res) => {//responde con valores aleatorios generados al recibir la peticion
   //console.log("El servidor Get respondió con un JSON");
   var geo = Math.round(Math.random()*10);

@@ -153,6 +153,57 @@
         }
       });
     }
+function enviar(estado) {
+		// Fetch the MQTT topic from the form
+		topic = currentSettings.topic;
+    if (estado) {
+				mensaje = '{"luz":1}';
+		}else {
+        mensaje = '{"luz":0}';
+    }
+		//mensaje = "Hola desde MqttFreboard ON";
+
+
+
+    freeboard.showLoadingIndicator(true);
+    let myHeaders = new Headers();
+
+    const options = {
+      method: 'POST',
+      headers: myHeaders,
+      body: new URLSearchParams({
+        'switchState': mensaje
+      }),
+    }
+    const host = '/dash/actuatorMQTT';
+    let myRequest = new Request(host, options);
+    fetch(myRequest, {credentials: 'include'})
+      .then((res) => {
+        if(res.ok) {
+          console.log('Ok');
+          return res.json(); // <- parseamos el response y lo devolvemos a nuestra función
+        }
+
+      })
+      .then((resParsed) => {
+        if(resParsed  !== null){//Si hay datos del dashboard en el JSON recibido mediante POST
+        //  var jsonObject = JSON.parse(resParsed);
+          console.log("recibido por el servidor: ",resParsed); // <- mostramos los datos recibidos
+          freeboard.showLoadingIndicator(false);
+      }else{
+          //alert("Now you dont have a saved Dasboard on cloud!");    //
+          freeboard.showLoadingIndicator(false);
+          console.log("Ocurrio un error en el servidor al publicar en Broker MQTT");
+          //freeboard.showDialog($("<div align='center'>Now you dont have a saved Dasboard on cloud!</div>"),"No prblem!","OK",null,function(){});
+      }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+
+}
+enviar(true);
 
     // **updateNow()** (required) : A public function we must implement that will be called when the user wants to manually refresh the datasource
     self.updateNow = function() {

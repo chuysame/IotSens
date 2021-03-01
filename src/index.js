@@ -83,6 +83,7 @@ app.use(require('./routes/users'));
 app.use(require('./routes/users_validated'));
 app.use(require('./routes/dashboards'));
 app.use(require('./routes/admin_users'));
+app.use(require('./routes/plugins'));
 
 
 //TODO: GET '/dasboard'
