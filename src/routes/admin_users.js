@@ -18,10 +18,10 @@ router.get('/admin/in123',(req,res,) => {//// Ruta abrir sesion
 router.post('/adm/in4321',speedLimiter,password_check,/* isAdm,*/(req,res)=>{ // recibe y revisa el pass le agrega un limite en la tasa de peticiones
         //console.log("res.locals.authotization: ", res.locals.authorization);
         //res.setHeader('Authorization',res.locals.authorization)
-        res.cookie("Authorization", res.locals.authorization,{maxAge: 1000*60*60*24});
+        res.cookie("Authorization", res.locals.authorization,{maxAge: 1000*60*60*6});//genera el "cookie" con seis horas de expiracion(usabilidad)
 	res.redirect('/admin/in123home');
 });
-router.get('/admin/in123home',async(req,res) => {//// Ruta home admin
+router.get('/admin/in123home',token_check, async(req,res) => {//// Ruta home admin
         console.log("Get cookies: ", req.cookies.Authorization);//lifetime
 	let var_ent = []
 	var_ent[0] = await {"PORT_SERVERLOCAL":read_env('/home/zagan/Escritorio/notes-app/.env',"PORT_SERVERLOCAL")};
@@ -33,8 +33,21 @@ router.get('/admin/in123home',async(req,res) => {//// Ruta home admin
 	res.render('admin/home_admin',{layout: 'admin_main',var_ent});
 });
 
-
-
+router.get('/admin/logout',(req,res) => {
+  res.write(`
+    <script>
+      window.location.assign('/admin/in123')
+      function eliminarCookies() {
+        document.cookie.split(";").forEach(function(c) {
+          document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+      }
+      eliminarCookies();
+    </script>
+  `);	
+ // res.redirect('/admin/in123');
+  res.end();
+});
 
 /*
 *______________________________REGISTRO DE ADMIN_USERS________________________________________________

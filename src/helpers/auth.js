@@ -3,6 +3,7 @@ const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
 const User = require('../models/Users');
 const helpers = {};
+const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
 helpers.isAuthenticated = (req, res, next)=> {//se ultiliza para permitir o rechazar el acceso segun se haya autenticado
 	if(req.isAuthenticated()){
 		return next();
@@ -59,12 +60,12 @@ helpers.limiter = rateLimit({//limita la tasa de peticiones por ususario
 
 
 helpers.password_check = function(req, res, next){
-        const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
 	const errors = [];
-        console.log("req.body: ", req.body)
+        //console.log("req.body: ", req.body)
 	if(process.env.SISTEMWEBPASS === req.body.password){
 		console.log('los password son iguales:');
                 const token = jwt.sign({
+                  exp: Math.floor(Date.now() / 1000) + (60 * 60*6),//asigna seis horas de expiracion al "token"
 		  id: process.env.PASS_ID,
 		  username: process.env.USERNAME
 		},
@@ -73,14 +74,28 @@ helpers.password_check = function(req, res, next){
                 res.locals.authorization = token;
 	        return next();
 	}else {
-//		errors.push({text:'Incorrect password'});
-//		res.render('admin/in123',{layout: 'admin_main_signin',errors});
-                res.json({status:null, data:"Incorrect password"});
-                res.end();
+		errors.push({text:'Incorrect password'});
+		res.render('admin/in123',{layout: 'admin_main_signin',errors});
+          //      res.json({status:null, data:"Incorrect password"});
+            //    res.end();
 	}
 
 }
 
+helpers.token_check = function(req, res, next){//Revisa el token enviado mediante cookies y autoriza la entrada al url
+        const errors = [];
+       // console.log("token recibido en token_check: ",req.cookies.Authorization);
+       	try {	
+        const token = jwt.verify(req.cookies.Authorization, JWT_SECRET)
+	        return next();
+	}catch(error) {
+          	errors.push({text:'No authorized write a password'});
+		res.render('admin/in123',{layout: 'admin_main_signin',errors});
+               // res.json({status:null, data:"Access no authorized"});
+                //res.end();
+	}
+
+}
 module.exports = helpers;
 
 
