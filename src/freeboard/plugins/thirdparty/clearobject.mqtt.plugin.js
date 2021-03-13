@@ -89,13 +89,19 @@
   // ### Datasource Implementation
   //
   // -------------------
+    let serverObtained = "";
+    let portObtained = 0;
+    let userObtained = "";
+    let passwordObtained = "";
+
   var mqttDatasourcePlugin = function(settings, updateCallback) {
     var self = this;
     var data = {};
 
     var currentSettings = settings;
-
+        
     function onConnect() {
+
       console.log("Subscribing to topic: " + currentSettings.topic);
       client.subscribe(currentSettings.topic);
     };
@@ -104,7 +110,7 @@
       console.log("Connection Lost");
       if (responseObject.errorCode !== 0)
         console.log("onConnectionLost: " + responseObject.errorMessage);
-      var client = new Paho.MQTT.Client(currentSettings.server, currentSettings.port, 'a:' + currentSettings.client_id + ':' + currentSettings.api_key + (new Date().getTime()).toString());
+/*      var client = new Paho.MQTT.Client(currentSettings.server, currentSettings.port, 'a:' + currentSettings.client_id + ':' + currentSettings.api_key + (new Date().getTime()).toString());
       client.connect({
         onSuccess: onConnect,
         userName: currentSettings.api_key,
@@ -116,6 +122,21 @@
           console.log("Connection failed: " + message.errorMessage);
         }
       });
+*/
+//      console.log("serverObtained: ", serverObtained);
+      var client = new Paho.MQTT.Client(serverObtained, portObtained, 'a:' + clientidObtained + ':' + userObtained + (new Date().getTime()).toString());
+      client.connect({
+        onSuccess: onConnect,
+        userName: userObtained,
+        password: passwordObtained,
+        useSSL: currentSettings.use_encryption,
+        timeout: 10,
+        cleanSession: true,
+        onFailure: function(message) {
+          console.log("Connection failed: " + message.errorMessage);
+        }
+      });
+    
     };
 
     function onMessageArrived(message) {
@@ -123,6 +144,7 @@
       var msg = "";
       if (currentSettings.json_data) {
         msg = JSON.parse(message.payloadString);
+        console.log("portObtained: ",portObtained);
       } else {
         msg = message.payloadString;
       }
@@ -140,11 +162,13 @@
 
       data = {};
       currentSettings = newSettings;
-      var client = new Paho.MQTT.Client(currentSettings.server, currentSettings.port, 'a:' + currentSettings.client_id + ':' + currentSettings.api_key + (new Date().getTime()).toString());
+//       console.log("serverObtained: ", serverObtained);
+     // var client = new Paho.MQTT.Client(currentSettings.server, currentSettings.port, 'a:' + currentSettings.client_id + ':' + currentSettings.api_key + (new Date().getTime()).toString());
+      var client = new Paho.MQTT.Client(serverObtained, portObtained, 'a:' + clientidObtained + ':' + userObtained + (new Date().getTime()).toString());
       client.connect({
         onSuccess: onConnect,
-        userName: currentSettings.api_key,
-        password: currentSettings.api_auth_token,
+        userName: userObtained,
+        password: passwordObtained,
         useSSL: currentSettings.use_encryption,
         timeout: 10,
         cleanSession: true,
@@ -152,7 +176,22 @@
           console.log("Connection failed: " + message.errorMessage);
         }
       });
+
+/*      var client = new Paho.MQTT.Client(currentSettings.server, currentSettings.port, 'a:' + currentSettings.client_id + ':' + currentSettings.api_key + (new Date().getTime()).toString());
+        client.connect({
+         onSuccess: onConnect,
+         userName: currentSettings.api_key,
+         password: currentSettings.api_auth_token,
+         useSSL: currentSettings.use_encryption,
+         timeout: 10,
+         cleanSession: true,
+         onFailure: function(message) {
+         console.log("Connection failed: " + message.errorMessage);
+        }
+      });
+*/
     }
+
 function enviar(estado) {
 		// Fetch the MQTT topic from the form
 		topic = currentSettings.topic;
@@ -175,7 +214,7 @@ function enviar(estado) {
         'switchState': mensaje
       }),
     }
-    const host = '/dash/actuatorMQTT';
+    const host = '/plugin/mqttP';
     let myRequest = new Request(host, options);
     fetch(myRequest, {credentials: 'include'})
       .then((res) => {
@@ -186,16 +225,42 @@ function enviar(estado) {
 
       })
       .then((resParsed) => {
+        //console.log("server: ", resParsed.server);
+        serverObtained = resParsed.server;
+        portObtained = resParsed.port;
+        userObtained = resParsed.user;
+        passwordObtained = resParsed.password;
+        clientidObtained = resParsed.clientid;
+        console.log("currentSetings: ", currentSettings);
+        console.log("serverObtained_Enviar: ", serverObtained);
+      //currentSettings.port = resParsed.port;
+
+        console.log("Creating Paho client at timestamp=" + (new Date().getTime()).toString());
+        client = new Paho.MQTT.Client(serverObtained, portObtained, 'a:' + clientidObtained + ':' + userObtained + (new Date().getTime()).toString());
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+        client.connect({
+          onSuccess: onConnect,
+          userName: userObtained,
+          password: passwordObtained,
+          useSSL: currentSettings.use_encryption,
+          timeout: 10,
+          cleanSession: true,
+          onFailure: function(message) {
+            console.log("Connection failed: " + message.errorMessage);
+          }
+        });
         if(resParsed  !== null){//Si hay datos del dashboard en el JSON recibido mediante POST
         //  var jsonObject = JSON.parse(resParsed);
           console.log("recibido por el servidor: ",resParsed); // <- mostramos los datos recibidos
+          
           freeboard.showLoadingIndicator(false);
-      }else{
+        }else{
           //alert("Now you dont have a saved Dasboard on cloud!");    //
           freeboard.showLoadingIndicator(false);
           console.log("Ocurrio un error en el servidor al publicar en Broker MQTT");
           //freeboard.showDialog($("<div align='center'>Now you dont have a saved Dasboard on cloud!</div>"),"No prblem!","OK",null,function(){});
-      }
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -203,8 +268,9 @@ function enviar(estado) {
 
 
 }
-enviar(true);
-
+enviar(false);
+console.log("serverObtained: ", serverObtained);
+console.log("currentSettings.use_encryption: ", currentSettings.use_encryption);
     // **updateNow()** (required) : A public function we must implement that will be called when the user wants to manually refresh the datasource
     self.updateNow = function() {
       console.log("Forcing Update");
@@ -213,11 +279,13 @@ enviar(true);
       } catch (err) {
         console.log("Could not disconnect client: " + err);
       }
-      var client = new Paho.MQTT.Client(currentSettings.server, currentSettings.port, 'a:' + currentSettings.client_id + ':' + currentSettings.api_key + (new Date().getTime()).toString());
+//////////////      console.log("server desde UpdateNow: ",serverObtained);
+/*      var client = new Paho.MQTT.Client(serverObtained, portObtained, 'a:' + clientidObtained + ':' + userObtained + (new Date().getTime()).toString());
+//      var client = new Paho.MQTT.Client(serverObtained, portObtained, 'a:' + currentSettings.client_id + ':' + userObtained + (new Date().getTime()).toString());
       client.connect({
         onSuccess: onConnect,
-        userName: currentSettings.api_key,
-        password: currentSettings.api_auth_token,
+        userName: userObtained,
+        password: passwordObtained,
         useSSL: currentSettings.use_encryption,
         timeout: 10,
         cleanSession: true,
@@ -225,6 +293,7 @@ enviar(true);
           console.log("Connection failed: " + message.errorMessage);
         }
       });
+*/
     }
 
     // **onDispose()** (required) : A public function we must implement that will be called when this instance of this plugin is no longer needed. Do anything you need to cleanup after yourself here.
@@ -234,9 +303,9 @@ enviar(true);
       }
       client = {};
     }
-
+/*
     console.log("Creating Paho client at timestamp=" + (new Date().getTime()).toString());
-    var client = new Paho.MQTT.Client(currentSettings.server, currentSettings.port, 'a:' + currentSettings.client_id + ':' + currentSettings.api_key + (new Date().getTime()).toString());
+    var client = new Paho.MQTT.Client(serverObtained, currentSettings.port, 'a:' + currentSettings.client_id + ':' + currentSettings.api_key + (new Date().getTime()).toString());
     client.onConnectionLost = onConnectionLost;
     client.onMessageArrived = onMessageArrived;
     client.connect({
@@ -250,5 +319,6 @@ enviar(true);
         console.log("Connection failed: " + message.errorMessage);
       }
     });
+*/
   }
 }());

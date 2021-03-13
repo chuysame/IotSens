@@ -117,9 +117,11 @@ router.post('/dash/actuatorMQTT', isAuthenticated, (req,res)=> {// Suscribe y pu
             console.log("Received '" + message + "' on '" + topic + "'");
         });
     });
-
+    var options={
+    retain:true,
+    qos:1};
     // publish a message to a topic
-    client.publish('EUtGgOQJIXue63y/output', switchState, function(err) {
+    client.publish('EUtGgOQJIXue63y/output', switchState, options,function(err) {
 			if(!err){//si fue posible publicar...
         console.log("Message published switchState: " + switchState );
 				res.send(JSON.stringify({'switchState':switchState}));

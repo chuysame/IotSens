@@ -50,10 +50,10 @@
 
                           })
                           .then((resParsed) => {
-                            console.log("Json: " + resParsed)
+//                            console.log("Json: " + resParsed)
                             if(resParsed  !== null){//Si hay datos del dashboard en el JSON
                               var jsonObject = JSON.parse(resParsed);
-                              console.log(jsonObject); // <- mostramos los datos recibidos
+ //                             console.log(jsonObject); // <- mostramos los datos recibidos
                               freeboard.loadDashboard(jsonObject, function() {
                                   freeboard.setEditing(false);
                               });
@@ -129,8 +129,8 @@
                 <div id="board-actions">
                     <ul class="board-toolbar vertical">
                         <li data-bind="click: loadDashboardFromLocalFile"><i id="full-screen-icon" class="icon-folder-open icon-white"></i><label id="full-screen">Load Freeboard</label></li>
-                        <li onclick="loadDashboardClickedCloud()" id = "loadOnCloud"><i id="full-screen-icon" class="fas fa-cloud-download-alt icon-white"></i><label id="full-screen">Load on cloud Freeboard</label></li>
-                        <li onclick="saveDashboardClickedCloud()" id = "saveOnCloud"><i id="full-screen-icon" class="fas fa-cloud-upload-alt icon-white"></i><label id="full-screen">save on cloud Freeboard</label></li>
+                        <li onclick="loadDashboardClickedCloud()" id = "loadOnCloud"><i id="full-screen-icon" class="fas fa-cloud-download-alt icon-white"></i><label id="full-screen">Load from cloud </label></li>
+                        <li onclick="saveDashboardClickedCloud()" id = "saveOnCloud"><i id="full-screen-icon" class="fas fa-cloud-upload-alt icon-white"></i><label id="full-screen">save on cloud </label></li>
                         <li><i class="icon-download-alt icon-white"></i>
 
                             <label data-bind="click: saveDashboardClicked">Save Freeboard</label>
